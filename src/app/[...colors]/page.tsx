@@ -1,4 +1,3 @@
-import { generateColors } from "@/actions/colors.actions";
 import Header from "@/components/header";
 
 type PageProps = {
@@ -19,7 +18,7 @@ const determineTextColor = (color: string) => {
 export default async function ColorsPage({ params }: PageProps) {
   const { colors: paramColors } = await params;
 
-  const colors = paramColors?.[0]?.split("-") ?? (await generateColors());
+  const colors = paramColors?.[0]?.split("-") ?? [];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 h-[94svh]">
