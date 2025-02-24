@@ -4,28 +4,28 @@
 
 @font-face {
   font-family: "Bespoke Stencil";
-  src: url("/fonts/BespokeStencil-Variable.ttf") format("truetype");
+  src: url("../fonts/BespokeStencil-Variable.ttf") format("truetype");
   font-weight: 1 999;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Bespoke Stencil";
-  src: url("/fonts/BespokeStencil-VariableItalic.ttf") format("truetype");
+  src: url("../fonts/BespokeStencil-VariableItalic.ttf") format("truetype");
   font-weight: 1 999;
   font-style: italic;
 }
 
 @font-face {
   font-family: "Archivo";
-  src: url("/fonts/Archivo-Variable.ttf") format("truetype");
+  src: url("../fonts/Archivo-Variable.ttf") format("truetype");
   font-weight: 1 999;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Archivo";
-  src: url("/fonts/Archivo-VariableItalic.ttf") format("truetype");
+  src: url("../fonts/Archivo-VariableItalic.ttf") format("truetype");
   font-weight: 1 999;
   font-style: italic;
 }

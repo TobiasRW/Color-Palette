@@ -6,29 +6,37 @@ if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET is not set");
 }
 
-// Define JWT_SECRET and encode it
+// Define the JWT secret
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Define session duration in days
 const SESSION_DURATION_DAYS = 7;
 
+// ______________________HELPER FUNCTIONS______________________
+
+// Helper function to convert text string into Uint8Array/binary
 const textToBinary = (text: string) => {
   const encoder = new TextEncoder();
   return encoder.encode(text);
 };
 
+// Helper function to convert binary/Uint8Array into text string
 const binaryToText = (binary: Uint8Array) => {
   const decoder = new TextDecoder();
   return decoder.decode(binary);
 };
 
+// Helper function to convert binary/Uint8Array into base64 string
 const binaryToBase64 = (binary: Uint8Array) => {
   return btoa(String.fromCharCode(...binary));
 };
 
+// Helper function to convert base64 string into binary/Uint8Array
 const base64ToBinary = (base64: string) => {
   return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
 };
+
+// ______________________SESSION FUNCTIONS______________________
 
 // Create a new session
 export async function createSession(userId: string) {
@@ -56,14 +64,17 @@ export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
 }
+
 // Encrypt session data using Web Crypto API
 export async function encrypt(userId: string) {
+  // Create the session data object
   const sessionData = {
     userId: userId,
     exp: Date.now() + SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000, // Set the expiration time
     iat: Date.now(), // Set the time the token was issued
   };
 
+  // Convert the session data to binary so it can be signed
   const dataBinary = textToBinary(JSON.stringify(sessionData));
 
   // Create a key for encryption
@@ -131,4 +142,14 @@ export async function decrypt(session?: string) {
     console.error("Failed to verify session:", error);
     return null;
   }
+}
+
+// getSession retrieves the session from the cookie
+export async function getSession() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("session");
+  if (!session?.value) return null;
+
+  const payload = await decrypt(session.value);
+  return payload;
 }

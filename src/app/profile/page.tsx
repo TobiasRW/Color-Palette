@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { decrypt } from "../lib/session";
-import { getUser } from "../actions/users.actions";
-import { signOut } from "../actions/auth.actions";
+import { decrypt } from "../../lib/session";
+import { getUser } from "@/actions/users.actions";
+import { signOut } from "@/actions/auth.actions";
 import Form from "next/form";
 import Link from "next/link";
 

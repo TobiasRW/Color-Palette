@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { signUp } from "../actions/auth.actions";
+import { signUp } from "@/actions/auth.actions";
 import Form from "next/form";
 import Link from "next/link";
 
