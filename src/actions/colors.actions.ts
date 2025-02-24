@@ -1,5 +1,10 @@
 "use server";
 
+import Palette from "../models/Palette";
+import dbConnect from "../lib/database";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
+
 export async function generateColors() {
   const getRandomColor = () =>
     `${Math.floor(Math.random() * 0xffffff)
@@ -8,3 +13,5 @@ export async function generateColors() {
 
   return Array.from({ length: 5 }, getRandomColor);
 }
+
+export async function savePalette(colors: string[]) {}
