@@ -20,6 +20,11 @@ const SignUpSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(64, "Password cannot be more than 64 characters"),
+  confirmPassword: z
+    .string()
+    .nonempty("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .max(64, "Password cannot be more than 64 characters"),
 });
 
 // Define a schema for validating sign-in form data using Zod
@@ -40,6 +45,7 @@ export async function signUp(prevState: any, formData: FormData) {
   const data = SignUpSchema.safeParse({
     email: formData.get("email")?.toString(),
     password: formData.get("password")?.toString(),
+    confirmPassword: formData.get("confirmPassword")?.toString(),
   });
 
   // If validation fails, return the first error message
@@ -49,15 +55,19 @@ export async function signUp(prevState: any, formData: FormData) {
   }
 
   // Extract validated email and password from the parsed data
-  const { email, password } = data.data;
+  const { email, password, confirmPassword } = data.data;
 
   try {
     // Connect to database
     await dbConnect();
 
     // Basic input validation: ensure email and password are provided
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       return { message: "please fill out all required fields" };
+    }
+
+    if (password !== confirmPassword) {
+      return { message: "Passwords do not match" };
     }
 
     // Check if a user with the given email already exists

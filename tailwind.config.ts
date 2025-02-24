@@ -11,6 +11,11 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        orange: "#FC7753",
+      },
+      fontFamily: {
+        heading: ["Bespoke Stencil", "serif"],
+        body: ["Archivo", "sans-serif"],
       },
     },
   },
