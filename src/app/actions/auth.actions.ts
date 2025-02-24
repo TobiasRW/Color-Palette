@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import dbConnect from "../lib/database";
 import User from "../models/User";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
+
+//___________________SCHEMAS_____________________
 
 // Define a schema for validating sign-up form data using Zod
 const SignUpSchema = z.object({
@@ -18,6 +21,18 @@ const SignUpSchema = z.object({
     .min(8, "Password must be at least 8 characters")
     .max(64, "Password cannot be more than 64 characters"),
 });
+
+// Define a schema for validating sign-in form data using Zod
+const SignInSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .email("Invalid email address")
+    .transform((value) => value.toLowerCase()), // Convert email to lowercase for consistency
+  password: z.string().nonempty("Password is required"),
+});
+
+//___________________ACTIONS_____________________
 
 // Define the signUp action - prevState comes from the useActionState hook
 export async function signUp(prevState: any, formData: FormData) {
@@ -52,20 +67,83 @@ export async function signUp(prevState: any, formData: FormData) {
     }
 
     // Create a new user in the database
-    const user = await User.create({
+    await User.create({
       email,
       password, // Password will be hashed by the pre-save hook in the User model
     });
-
-    // Create a session for the newly registered user
-    await createSession(user._id.toString());
   } catch (error) {
-    // Log any errors that occur during the sign-up process
     console.error("Signup error:", error);
     return {
       message: "An unsuspected error occurred. Please try again later.",
     };
   }
-  // Redirect the user to the home page after successful sign-up.
+  // Redirect the user to the sign-in after successful sign-up.
+  redirect("/signin");
+}
+
+//___________________________________________________________________
+
+// Define the signIn action - prevState comes from the useActionState hook
+export async function signIn(prevState: any, formData: FormData) {
+  // Validate form data against the SignInSchema
+  const data = SignInSchema.safeParse({
+    email: formData.get("email")?.toString(),
+    password: formData.get("password")?.toString(),
+  });
+
+  // If validation fails, return the first error message
+  if (!data.success) {
+    const firstError = data.error.errors[0].message;
+    return { message: firstError };
+  }
+
+  // Extract validated email and password from the parsed data
+  const { email, password } = data.data;
+
+  try {
+    // Connect to database
+    await dbConnect();
+
+    // Basic input validation: ensure email and password are provided
+    if (!email || !password) {
+      return { message: "please fill out all required fields" };
+    }
+
+    // Find a user with the given email - specify that the password field should be included in the query
+    const user = await User.findOne({ email }).select("+password");
+
+    // If no user is found, return an error message
+    if (!user) {
+      return { message: "User not found" };
+    }
+
+    // Verify the provided password against the stored hash
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    // If the password is invalid, return an error message
+    if (!isValidPassword) {
+      return { message: "Invalid password" };
+    }
+
+    // Create a session for the authenticated user
+    await createSession(user._id.toString());
+  } catch (error) {
+    console.error("Signin error:", error);
+    return {
+      message: "An unsuspected error occurred. Please try again later.",
+    };
+  }
+
+  // Redirect the user to the profile page after successful sign-in
+  redirect("/profile");
+}
+
+//___________________________________________________________________
+
+// Define the signOut action
+export async function signOut() {
+  // Delete the current session to sign the user out
+  await deleteSession();
+  // Redirect the user to the home page after signing out
   redirect("/");
 }

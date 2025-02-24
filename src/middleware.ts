@@ -5,7 +5,7 @@ export default async function middleware(request: NextRequest) {
   const session = request.cookies.get("session")?.value || "";
   const payload = await decrypt(session);
   if (!payload?.userId) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/signin", request.url));
   }
   return NextResponse.next();
 }
