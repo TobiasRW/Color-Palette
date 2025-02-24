@@ -62,3 +62,13 @@ export async function decrypt(session: string | undefined = "") {
     return null;
   }
 }
+
+// getSession retrieves the session from the cookie
+export async function getSession() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("session");
+  if (!session?.value) return null;
+
+  const payload = await decrypt(session.value);
+  return payload;
+}

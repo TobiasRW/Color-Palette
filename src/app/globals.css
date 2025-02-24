@@ -39,7 +39,8 @@ input,
 label,
 button,
 a,
-p {
+p,
+span {
   font-family: "Archivo", sans-serif;
 }
 
