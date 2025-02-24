@@ -1,21 +1,46 @@
-"use client";
 import Link from "next/link";
+import { getUser } from "@/actions/users.actions";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getUser();
   return (
-    <main className="flex flex-col items-center justify-center h-screen text-center">
-      <h1 className="text-4xl font-bold mb-4">
-        Welcome to the Palette Generator 🎨
+    <div className="flex flex-col text-center pt-20 gap-4 w-10/12 mx-auto">
+      <h1 className="font-heading font-bold text-4xl text-orange text-center">
+        Palette
       </h1>
-      <p className="text-lg mb-8">
-        Click below to explore a color palette or generate your own.
+      <p className="text-lg mb-4">
+        Welcome to the Palette! Generate color palettes for you next project 🎨
       </p>
       <Link
         href="/fbfdfb-343434-2f3061-ff8c42-fc7753"
-        className="bg-orange text-white px-6 py-3 rounded-md shadow-md text-lg"
+        className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md"
       >
-        View Palette
+        Generate Palette
       </Link>
-    </main>
+      <hr className="border-none h-[1px] bg-foreground my-4" />
+      {user ? (
+        <Link
+          href="/profile"
+          className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md"
+        >
+          See Profile
+        </Link>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <Link
+            href="/signin"
+            className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md"
+          >
+            Sign in
+          </Link>
+          <Link
+            href="/signup"
+            className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md"
+          >
+            Sign up
+          </Link>
+        </div>
+      )}
+    </div>
   );
 }

@@ -145,7 +145,7 @@ export async function signIn(prevState: any, formData: FormData) {
   }
 
   // Redirect the user to the profile page after successful sign-in
-  redirect("/profile");
+  redirect("/");
 }
 
 //___________________________________________________________________

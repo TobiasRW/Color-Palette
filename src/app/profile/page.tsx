@@ -26,9 +26,9 @@ export default async function ProfilePage() {
       </div>
       <Link
         href="/"
-        className="bg-orange text-white font-body font-medium text-lg p-2 rounded-md shadow-md w-10/12 mx-auto flex items-center justify-center"
+        className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md w-10/12 mx-auto flex items-center justify-center"
       >
-        Create Palettes!
+        Go to home page
       </Link>
       <Form
         action={signOut}
@@ -36,7 +36,7 @@ export default async function ProfilePage() {
       >
         <button
           type="submit"
-          className="bg-orange text-white font-body font-medium text-lg p-2 rounded-md shadow-md"
+          className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md"
         >
           Sign out
         </button>
