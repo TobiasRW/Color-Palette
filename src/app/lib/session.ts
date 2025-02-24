@@ -46,7 +46,7 @@ export async function encrypt(userId: string) {
   return new SignJWT({ userId })
     .setProtectedHeader({ alg: "HS256" }) // Specify the algorithm
     .setIssuedAt() // Set the time the token was issued
-    .setExpirationTime(SESSION_DURATION_DAYS) // Set the expiration time
+    .setExpirationTime(`${SESSION_DURATION_DAYS}d`) // Set the expiration time
     .sign(encodedSecret); // Sign the token with the secret
 }
 
