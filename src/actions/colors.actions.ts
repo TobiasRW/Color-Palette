@@ -99,3 +99,22 @@ export async function checkSavedPalette(
     return { isSaved: false };
   }
 }
+
+export async function getUserPalettes() {
+  try {
+    await dbConnect();
+
+    const session = await getSession();
+
+    if (!session?.userId) {
+      return { error: "You need to be logged in to view saved palettes" };
+    }
+
+    const palettes = await Palette.find({ userId: session.userId });
+
+    return { data: palettes };
+  } catch (error) {
+    console.error("Error fetching user palettes:", error);
+    return { error: "Failed to fetch user palettes" };
+  }
+}

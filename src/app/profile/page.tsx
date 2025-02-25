@@ -3,8 +3,10 @@ import { redirect } from "next/navigation";
 import { decrypt } from "../../lib/session";
 import { getUser } from "@/actions/users.actions";
 import { signOut } from "@/actions/auth.actions";
+import { getUserPalettes } from "@/actions/colors.actions";
 import Form from "next/form";
 import Link from "next/link";
+import ColorGrid from "@/components/color-grid";
 
 export default async function ProfilePage() {
   const session = (await cookies()).get("session")?.value || "";
@@ -15,6 +17,7 @@ export default async function ProfilePage() {
   }
 
   const user = await getUser();
+  const palettes = await getUserPalettes();
 
   return (
     <div className="pt-20">
@@ -41,6 +44,17 @@ export default async function ProfilePage() {
           Sign out
         </button>
       </Form>
+
+      <div className="pt-20 text-center flex flex-col gap-4">
+        <p className="text-lg font-medium">Your Saved Palettes!</p>
+        {palettes.data ? (
+          <ColorGrid palettes={palettes.data} />
+        ) : (
+          <p className="text-center text-gray-500">
+            {palettes.error || "No saved palettes yet"}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
