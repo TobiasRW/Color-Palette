@@ -4,6 +4,7 @@ import Palette from "../models/Palette";
 import dbConnect from "../lib/database";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 // Generates a palette and redirects to the new URL
 export async function generateColors() {
@@ -49,7 +50,7 @@ export async function savePalette(colors: string[]) {
   }
 }
 
-export async function removePalette(colors: string[]) {
+export async function removePalette(colors: string[], path?: string) {
   try {
     await dbConnect();
 
@@ -69,6 +70,10 @@ export async function removePalette(colors: string[]) {
       return { error: "Palette not found" };
     }
 
+    if (path) {
+      revalidatePath(path);
+    }
+
     return { message: "Palette removed successfully!" };
   } catch (error) {
     console.error("Error removing palette:", error);
@@ -77,7 +82,7 @@ export async function removePalette(colors: string[]) {
 }
 
 export async function checkSavedPalette(
-  colors: string[]
+  colors: string[],
 ): Promise<{ isSaved: boolean }> {
   try {
     await dbConnect();
@@ -112,7 +117,12 @@ export async function getUserPalettes() {
 
     const palettes = await Palette.find({ userId: session.userId });
 
-    return { data: palettes };
+    // Serialize the data before returning
+    const serializedPalettes = palettes.map((palette) => ({
+      colors: palette.colors,
+    }));
+
+    return { data: serializedPalettes };
   } catch (error) {
     console.error("Error fetching user palettes:", error);
     return { error: "Failed to fetch user palettes" };
