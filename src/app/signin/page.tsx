@@ -16,25 +16,25 @@ export default function Page() {
   const [state, signInAction, pending] = useActionState(signIn, initialState);
   return (
     <div className="pt-20">
-      <h1 className="font-heading font-bold text-4xl text-orange text-center">
+      <h1 className="text-center font-heading text-4xl font-bold text-orange">
         Palette
       </h1>
       <div className="flex flex-col gap-4 pt-10">
-        <h2 className="text-center text-foreground text-xl font-body font-medium">
+        <h2 className="text-center font-body text-xl font-medium text-foreground">
           Sign in
         </h2>
-        <hr className="border-none h-[1px] bg-foreground w-10/12 mx-auto" />
+        <hr className="mx-auto h-[1px] w-10/12 border-none bg-foreground" />
       </div>
       <Form
         action={signInAction}
-        className="w-10/12 mx-auto flex flex-col gap-4 pt-10"
+        className="mx-auto flex w-10/12 flex-col gap-4 pt-10"
       >
         <label className="flex flex-col gap-1">
           Email
           <input
             type="email"
             name="email"
-            className="border border-foreground rounded-md bg-white p-2 shadow-md"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md"
             placeholder="Email..."
           />
         </label>
@@ -43,7 +43,7 @@ export default function Page() {
           <input
             type="password"
             name="password"
-            className="border border-foreground rounded-md bg-white p-2 shadow-md"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md"
             placeholder="Password..."
           />
           <p aria-live="polite">{state?.message}</p>
@@ -56,14 +56,14 @@ export default function Page() {
           disabled={pending}
           className={` ${
             pending ? "bg-orange/50" : "bg-orange"
-          } text-white p-2 rounded-md`}
+          } rounded-md p-2 text-white`}
         >
           {pending ? "Signing In..." : "Sign In"}
         </button>
       </Form>
-      <p className="text-center pt-4">
+      <p className="pt-4 text-center">
         Dont have an account? Sign up{" "}
-        <Link href="/signup" className="underline font-medium">
+        <Link href="/signup" className="font-medium underline">
           here
         </Link>
       </p>

@@ -59,15 +59,15 @@ export default function Header({ colors }: HeaderProps) {
   };
 
   return (
-    <header className="bg-background py-2 h-[6svh] border-t border-foreground fixed bottom-0 w-full">
-      <div className="w-11/12 mx-auto flex items-center justify-between">
-        <h1 className="font-heading font-bold text-2xl text-orange">
+    <header className="fixed bottom-0 h-[6svh] w-full border-t border-foreground bg-background py-2">
+      <div className="mx-auto flex w-11/12 items-center justify-between">
+        <h1 className="font-heading text-2xl font-bold text-orange">
           <Link href="/">Palette</Link>
         </h1>
         <div className="flex h-5 items-center space-x-4">
           <button
             onClick={generateColors}
-            className="bg-orange text-white font-body text-xs p-2 rounded-md shadow-md"
+            className="rounded-md bg-orange p-2 font-body text-xs text-white shadow-md"
           >
             Generate
           </button>
@@ -89,14 +89,14 @@ export default function Header({ colors }: HeaderProps) {
         {message && (
           <motion.div
             key="message"
-            className="fixed bottom-16 w-full flex justify-center z-50"
+            className="fixed bottom-16 z-50 flex w-full justify-center"
             variants={messageVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
           >
             <p
-              className={`shadow-lg text-white px-4 py-4 rounded-md ${
+              className={`rounded-md px-4 py-4 text-white shadow-lg ${
                 message.error ? "bg-red-500" : "bg-green-500"
               }`}
             >

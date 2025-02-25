@@ -21,12 +21,12 @@ export default async function ColorsPage({ params }: PageProps) {
   const colors = paramColors?.[0]?.split("-") ?? [];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 h-[94svh]">
+    <div className="grid h-[94svh] grid-cols-1 lg:grid-cols-5">
       <Header colors={colors} />
       {colors.map((color) => (
         <div
           key={color}
-          className="flex items-center justify-center text-white font-semibold h-full"
+          className="flex h-full items-center justify-center font-semibold text-white"
           style={{
             backgroundColor: `#${color}`,
             color: determineTextColor(color),

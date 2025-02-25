@@ -4,16 +4,16 @@ type ColorGridProps = {
 
 export default function ColorGrid({ palettes }: ColorGridProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-10/12 mx-auto">
+    <div className="mx-auto grid w-10/12 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {palettes.map((palette, index) => (
         <div
           key={index}
-          className="flex rounded-md overflow-hidden h-12 shadow-md"
+          className="flex h-12 overflow-hidden rounded-md shadow-md"
         >
           {palette.colors.map((color, colorIndex) => (
             <div
               key={colorIndex}
-              className="flex-1 h-full"
+              className="h-full flex-1"
               style={{ backgroundColor: `#${color}` }}
             />
           ))}

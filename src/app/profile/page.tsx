@@ -21,31 +21,31 @@ export default async function ProfilePage() {
 
   return (
     <div className="pt-20">
-      <h1 className="font-heading font-bold text-4xl text-orange text-center">
+      <h1 className="text-center font-heading text-4xl font-bold text-orange">
         Palette
       </h1>
-      <div className="text-center text-xl pb-20">
+      <div className="pb-20 text-center text-xl">
         <p className="">{user?.email}</p>
       </div>
       <Link
         href="/"
-        className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md w-10/12 mx-auto flex items-center justify-center"
+        className="mx-auto flex w-10/12 items-center justify-center rounded-md bg-orange p-2 font-body font-medium text-white shadow-md"
       >
         Go to home page
       </Link>
       <Form
         action={signOut}
-        className="w-10/12 mx-auto flex flex-col gap-4 pt-10"
+        className="mx-auto flex w-10/12 flex-col gap-4 pt-10"
       >
         <button
           type="submit"
-          className="bg-orange text-white font-body font-medium p-2 rounded-md shadow-md"
+          className="rounded-md bg-orange p-2 font-body font-medium text-white shadow-md"
         >
           Sign out
         </button>
       </Form>
 
-      <div className="pt-20 text-center flex flex-col gap-4">
+      <div className="flex flex-col gap-4 pt-20 text-center">
         <p className="text-lg font-medium">Your Saved Palettes!</p>
         {palettes.data ? (
           <ColorGrid palettes={palettes.data} />
