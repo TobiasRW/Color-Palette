@@ -17,4 +17,85 @@ export async function generateColors() {
   return redirect(`/${colorString}`);
 }
 
-export async function savePalette(colors: string[]) {}
+export async function savePalette(colors: string[]) {
+  try {
+    await dbConnect();
+
+    const session = await getSession();
+
+    if (!session?.userId) {
+      return { error: "you need to be logged in to save a palette" };
+    }
+
+    // Check if the palette already exists for the user, regardless of order
+    const existingPalette = await Palette.findOne({
+      userId: session.userId,
+      colors: { $all: colors }, // Check if the colors array contains all the same colors
+    });
+
+    if (existingPalette) {
+      return { error: "Palette already saved!" };
+    }
+
+    await Palette.create({
+      userId: session.userId,
+      colors,
+    });
+
+    return { message: "Palette saved successfully!" }; // Return a success message
+  } catch (error) {
+    console.error("Error saving palette:", error);
+    return { error: "Failed to save palette" }; // Return an error message
+  }
+}
+
+export async function removePalette(colors: string[]) {
+  try {
+    await dbConnect();
+
+    const session = await getSession();
+
+    if (!session?.userId) {
+      return { error: "you need to be logged in to remove a palette" };
+    }
+
+    // Find and remove the palette
+    const result = await Palette.findOneAndDelete({
+      userId: session.userId,
+      colors: { $all: colors },
+    });
+
+    if (!result) {
+      return { error: "Palette not found" };
+    }
+
+    return { message: "Palette removed successfully!" };
+  } catch (error) {
+    console.error("Error removing palette:", error);
+    return { error: "Failed to remove palette" };
+  }
+}
+
+export async function checkSavedPalette(
+  colors: string[]
+): Promise<{ isSaved: boolean }> {
+  try {
+    await dbConnect();
+
+    const session = await getSession();
+
+    if (!session?.userId) {
+      return { isSaved: false }; // Fix this return to match the type
+    }
+
+    const existingPalette = await Palette.findOne({
+      userId: session.userId,
+      colors: { $all: colors },
+    });
+
+    return { isSaved: !!existingPalette };
+  } catch (error) {
+    console.error("Error checking saved palette:", error);
+    return { isSaved: false };
+  }
+}

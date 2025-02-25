@@ -22,7 +22,7 @@ export default async function ColorsPage({ params }: PageProps) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 h-[94svh]">
-      <Header />
+      <Header colors={colors} />
       {colors.map((color) => (
         <div
           key={color}
