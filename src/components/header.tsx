@@ -16,9 +16,11 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
+import { useLockStore } from "@/store/store"; // Zustand store
 
 type HeaderProps = {
   colors: string[];
+  lockedColors: { [index: number]: string };
 };
 
 type MessageType = {
@@ -34,6 +36,7 @@ const messageVariants = {
 export default function Header({ colors }: HeaderProps) {
   const [message, setMessage] = useState<MessageType | null>(null);
   const [isSavedPalette, setIsSavedPalette] = useState<boolean>(false);
+  const { lockedColors } = useLockStore(); // Zustand persisted state
 
   const router = useRouter();
 
@@ -66,6 +69,10 @@ export default function Header({ colors }: HeaderProps) {
     setTimeout(() => setMessage(null), 3000);
   };
 
+  const handleGenerate = () => {
+    generateColors(lockedColors);
+  };
+
   return (
     <header className="fixed bottom-0 h-[6svh] w-full border-t border-foreground bg-background py-2">
       <div className="mx-auto flex w-11/12 items-center justify-between">
@@ -93,7 +100,7 @@ export default function Header({ colors }: HeaderProps) {
           </div>
           <Separator orientation="vertical" />
           <button
-            onClick={generateColors}
+            onClick={handleGenerate}
             className="rounded-md bg-orange p-2 font-body text-xs text-white shadow-md"
           >
             Generate

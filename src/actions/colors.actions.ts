@@ -7,13 +7,19 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 // Generates a palette and redirects to the new URL
-export async function generateColors() {
+export async function generateColors(
+  lockedColors: { [index: number]: string } = {},
+) {
   const getRandomColor = () =>
     `${Math.floor(Math.random() * 0xffffff)
       .toString(16)
       .padStart(6, "0")}`;
 
-  const colors = Array.from({ length: 5 }, getRandomColor);
+  const colors = Array.from(
+    { length: 5 },
+    (_, index) => lockedColors[index] || getRandomColor(),
+  );
+
   const colorString = colors.join("-");
   return redirect(`/${colorString}`);
 }
