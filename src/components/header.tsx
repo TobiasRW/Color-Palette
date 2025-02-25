@@ -1,6 +1,11 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import { Heart, List } from "@phosphor-icons/react/dist/ssr";
+import {
+  Heart,
+  List,
+  ArrowBendUpLeft,
+  ArrowBendUpRight,
+} from "@phosphor-icons/react/dist/ssr";
 import {
   generateColors,
   savePalette,
@@ -10,6 +15,7 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useRouter } from "next/navigation";
 
 type HeaderProps = {
   colors: string[];
@@ -28,6 +34,8 @@ const messageVariants = {
 export default function Header({ colors }: HeaderProps) {
   const [message, setMessage] = useState<MessageType | null>(null);
   const [isSavedPalette, setIsSavedPalette] = useState<boolean>(false);
+
+  const router = useRouter();
 
   // Check if palette is saved on component mount or when colors change
   useEffect(() => {
@@ -61,10 +69,29 @@ export default function Header({ colors }: HeaderProps) {
   return (
     <header className="fixed bottom-0 h-[6svh] w-full border-t border-foreground bg-background py-2">
       <div className="mx-auto flex w-11/12 items-center justify-between">
-        <h1 className="font-heading text-2xl font-bold text-orange">
-          <Link href="/">Palette</Link>
+        <h1 className="text-2xl font-bold text-orange">
+          <Link href="/" className="font-heading">
+            Palette
+          </Link>
         </h1>
         <div className="flex h-5 items-center space-x-4">
+          <div className="flex gap-2">
+            <button
+              className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={() => router.back()}
+              aria-label="Go back"
+            >
+              <ArrowBendUpLeft className="h-4 w-4 text-foreground" />
+            </button>
+            <button
+              className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={() => router.forward()}
+              aria-label="Go forward"
+            >
+              <ArrowBendUpRight className="h-4 w-4 text-foreground" />
+            </button>
+          </div>
+          <Separator orientation="vertical" />
           <button
             onClick={generateColors}
             className="rounded-md bg-orange p-2 font-body text-xs text-white shadow-md"
