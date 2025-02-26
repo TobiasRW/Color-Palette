@@ -16,6 +16,7 @@ const SignUpSchema = z.object({
     .nonempty("Email is required")
     .email("Invalid email address")
     .transform((value) => value.toLowerCase()), // Convert email to lowercase for consistency
+  name: z.string().nonempty("Name is required"),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -44,6 +45,7 @@ export async function signUp(prevState: any, formData: FormData) {
   // Validate form data against the SignUpSchema
   const data = SignUpSchema.safeParse({
     email: formData.get("email")?.toString(),
+    name: formData.get("name")?.toString(),
     password: formData.get("password")?.toString(),
     confirmPassword: formData.get("confirmPassword")?.toString(),
   });
@@ -55,14 +57,14 @@ export async function signUp(prevState: any, formData: FormData) {
   }
 
   // Extract validated email and password from the parsed data
-  const { email, password, confirmPassword } = data.data;
+  const { email, name, password, confirmPassword } = data.data;
 
   try {
     // Connect to database
     await dbConnect();
 
     // Basic input validation: ensure email and password are provided
-    if (!email || !password || !confirmPassword) {
+    if (!email || !name || !password || !confirmPassword) {
       return { message: "please fill out all required fields" };
     }
 
@@ -79,6 +81,7 @@ export async function signUp(prevState: any, formData: FormData) {
     // Create a new user in the database
     await User.create({
       email,
+      name,
       password, // Password will be hashed by the pre-save hook in the User model
     });
   } catch (error) {

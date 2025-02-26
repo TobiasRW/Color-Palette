@@ -40,6 +40,15 @@ export default function Page() {
           />
         </label>
         <label className="flex flex-col gap-1">
+          Name
+          <input
+            type="text"
+            name="name"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md"
+            placeholder="First Name..."
+          />
+        </label>
+        <label className="flex flex-col gap-1">
           Password
           <input
             type="password"

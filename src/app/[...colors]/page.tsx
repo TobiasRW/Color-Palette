@@ -1,7 +1,7 @@
 "use client";
-import Header from "@/components/header";
+import Generator from "@/components/generator";
 import { useParams } from "next/navigation";
-import { LockSimple, LockSimpleOpen } from "@phosphor-icons/react/dist/ssr";
+import { LockSimple, LockSimpleOpen } from "@phosphor-icons/react";
 import { useLockStore } from "@/store/store"; // Import Zustand store
 
 const determineTextColor = (color: string) => {
@@ -22,7 +22,7 @@ export default function ColorsPage() {
 
   return (
     <div className="grid h-[94svh] grid-cols-1 lg:grid-cols-5">
-      <Header colors={colors} lockedColors={lockedColors} />
+      <Generator colors={colors} lockedColors={lockedColors} />
       {colors.map((color, index) => (
         <div
           key={color}

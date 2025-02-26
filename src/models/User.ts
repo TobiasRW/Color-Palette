@@ -14,6 +14,10 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
@@ -22,7 +26,7 @@ const userSchema = new Schema(
       maxlength: [64, "Password cannot be more than 64 characters"],
     },
   },
-  { timestamps: true } // Automatically add createdAt and updatedAt
+  { timestamps: true }, // Automatically add createdAt and updatedAt
 );
 
 // Hash the password before saving the user
@@ -33,6 +37,19 @@ userSchema.pre("save", async function (next) {
 
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
+  next();
+});
+
+// Add this after the existing 'save' middleware
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate() as { password?: string };
+
+  if (!update?.password) {
+    return next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  update.password = await bcrypt.hash(update.password, salt);
   next();
 });
 
