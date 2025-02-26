@@ -1,11 +1,12 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
+import Sidebar from "./sidebar";
 import {
   Heart,
   List,
   ArrowBendUpLeft,
   ArrowBendUpRight,
-} from "@phosphor-icons/react/dist/ssr";
+} from "@phosphor-icons/react";
 import {
   generateColors,
   savePalette,
@@ -34,6 +35,7 @@ const messageVariants = {
 };
 
 export default function Generator({ colors }: HeaderProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [message, setMessage] = useState<MessageType | null>(null);
   const [isSavedPalette, setIsSavedPalette] = useState<boolean>(false);
   const { lockedColors } = useLockStore(); // Zustand persisted state
@@ -74,71 +76,77 @@ export default function Generator({ colors }: HeaderProps) {
   };
 
   return (
-    <header className="fixed bottom-0 h-[6svh] w-full border-t border-foreground bg-background py-2">
-      <div className="mx-auto flex w-11/12 items-center justify-between">
-        <h1 className="text-2xl font-bold text-orange">
-          <Link href="/" className="font-heading">
-            Palette
-          </Link>
-        </h1>
-        <div className="flex h-5 items-center space-x-4">
-          <div className="flex gap-2">
+    <>
+      <Sidebar isOpen={isSidebarOpen} />
+      <header className="fixed bottom-0 z-30 h-[6svh] w-full border-t border-foreground bg-background py-2">
+        <div className="mx-auto flex w-11/12 items-center justify-between">
+          <h1 className="text-2xl font-bold text-orange">
+            <Link href="/" className="font-heading">
+              Palette
+            </Link>
+          </h1>
+          <div className="flex h-5 items-center space-x-4">
+            <div className="flex gap-2">
+              <button
+                className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => router.back()}
+                aria-label="Go back"
+              >
+                <ArrowBendUpLeft className="h-4 w-4 text-foreground" />
+              </button>
+              <button
+                className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => router.forward()}
+                aria-label="Go forward"
+              >
+                <ArrowBendUpRight className="h-4 w-4 text-foreground" />
+              </button>
+            </div>
+            <Separator orientation="vertical" />
             <button
-              className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => router.back()}
-              aria-label="Go back"
+              onClick={handleGenerate}
+              className="rounded-md bg-orange p-2 font-body text-xs text-white shadow-md"
             >
-              <ArrowBendUpLeft className="h-4 w-4 text-foreground" />
+              Generate
             </button>
+            <Separator orientation="vertical" />
+            <Heart
+              weight={isSavedPalette ? "fill" : "regular"}
+              className={`h-5 w-5 cursor-pointer ${
+                isSavedPalette ? "text-red-500" : "text-foreground"
+              }`}
+              onClick={handleToggleSavePalette}
+            />
+            <Separator orientation="vertical" />
             <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => router.forward()}
-              aria-label="Go forward"
             >
-              <ArrowBendUpRight className="h-4 w-4 text-foreground" />
+              <List className="h-5 w-5 text-foreground" />
             </button>
-          </div>
-          <Separator orientation="vertical" />
-          <button
-            onClick={handleGenerate}
-            className="rounded-md bg-orange p-2 font-body text-xs text-white shadow-md"
-          >
-            Generate
-          </button>
-          <Separator orientation="vertical" />
-          <Heart
-            weight={isSavedPalette ? "fill" : "regular"}
-            className={`h-5 w-5 cursor-pointer ${
-              isSavedPalette ? "text-red-500" : "text-foreground"
-            }`}
-            onClick={handleToggleSavePalette}
-          />
-          <Separator orientation="vertical" />
-          <div>
-            <List className="h-5 w-5 text-foreground" />
           </div>
         </div>
-      </div>
-      <AnimatePresence>
-        {message && (
-          <motion.div
-            key="message"
-            className="fixed bottom-16 z-50 flex w-full justify-center"
-            variants={messageVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-          >
-            <p
-              className={`rounded-md px-4 py-4 text-white shadow-lg ${
-                message.error ? "bg-red-500" : "bg-green-500"
-              }`}
+        <AnimatePresence>
+          {message && (
+            <motion.div
+              key="message"
+              className="fixed bottom-16 z-50 flex w-full justify-center"
+              variants={messageVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
             >
-              {message.error || message.message}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+              <p
+                className={`rounded-md px-4 py-4 text-white shadow-lg ${
+                  message.error ? "bg-red-500" : "bg-green-500"
+                }`}
+              >
+                {message.error || message.message}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </>
   );
 }

@@ -1,7 +1,6 @@
 "use server";
 
-import { deleteSession, getSession } from "../lib/session";
-import { redirect } from "next/navigation";
+import { getSession } from "../lib/session";
 import { revalidatePath } from "next/cache";
 import dbConnect from "../lib/database";
 import User from "../models/User";

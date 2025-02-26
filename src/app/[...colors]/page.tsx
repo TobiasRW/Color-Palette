@@ -26,7 +26,7 @@ export default function ColorsPage() {
       {colors.map((color, index) => (
         <div
           key={color}
-          className="h-full font-semibold text-white"
+          className="z-10 h-full font-semibold text-white"
           style={{
             backgroundColor: `#${color}`,
             color: determineTextColor(color),
