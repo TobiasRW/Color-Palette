@@ -7,7 +7,7 @@ export default function Header() {
   // Check if the path contains hex colors (for the generate colors page)
   const isColorPath = /^\/[0-9a-f-]+$/i.test(pathname || "");
 
-  // If we're on a color path, don't render the header
+  // If on a color path, don't render the header
   if (isColorPath) return null;
 
   return (

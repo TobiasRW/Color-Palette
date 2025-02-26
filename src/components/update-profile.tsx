@@ -5,6 +5,7 @@ import { updateUser } from "@/actions/users.actions";
 import { signOut } from "@/actions/auth.actions";
 import { Pencil, X, Check, CircleNotch, SignOut } from "@phosphor-icons/react";
 
+// Define props for UpdateProfile component
 type UpdateProfileProps = {
   user: {
     email: string;
@@ -17,13 +18,17 @@ const initialState = {
 };
 
 export default function UpdateProfile({ user }: UpdateProfileProps) {
-  const [isUpdating, setIsUpdating] = useState(false);
+  // Use the useActionState hook to manage the state and execute the signUp action.
+  // The hook returns the current state (message string), the updateProfile action function and a boolean indicating if the action is pending.
   const [state, updateProfileAction, pending] = useActionState(
     updateUser,
     initialState,
   );
 
-  // Reset udpate after successful update
+  // State to manage update mode
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Reset udpate mode after successful update
   useEffect(() => {
     if (state?.message) {
       setIsUpdating(false);

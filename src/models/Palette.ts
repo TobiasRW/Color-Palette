@@ -5,6 +5,7 @@ import mongoose, {
   type InferSchemaType,
 } from "mongoose";
 
+// Define the palette schema
 const paletteSchema = new Schema(
   {
     userId: {
@@ -21,12 +22,14 @@ const paletteSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
+// Infer TypeScript type for Palette model
 export type PaletteType = InferSchemaType<typeof paletteSchema> & {
   _id: mongoose.Types.ObjectId | string;
 };
 
+// Export the Palette model (avoid redeﬁning model in development if it already exists)
 const Palette = models.Palette || model<PaletteType>("Palette", paletteSchema);
 export default Palette;

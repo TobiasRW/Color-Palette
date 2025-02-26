@@ -19,34 +19,38 @@ import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useLockStore } from "@/store/store"; // Zustand store
 
-type HeaderProps = {
+// Define props for Generator component
+type GeneratorProps = {
   colors: string[];
   lockedColors: { [index: number]: string };
 };
 
+// Define message type for success and error messages
 type MessageType = {
   message?: string;
   error?: string;
 };
 
+// Define variants for message animation
 const messageVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   hidden: { opacity: 0, y: 10, transition: { duration: 0.5 } },
 };
 
-export default function Generator({ colors }: HeaderProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [message, setMessage] = useState<MessageType | null>(null);
-  const [isSavedPalette, setIsSavedPalette] = useState<boolean>(false);
+export default function Generator({ colors }: GeneratorProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Controls sidebar visibility
+  const [message, setMessage] = useState<MessageType | null>(null); // State for success and error messages
+  const [isSavedPalette, setIsSavedPalette] = useState<boolean>(false); // State to check if palette is saved
   const { lockedColors } = useLockStore(); // Zustand persisted state
 
+  // Get router
   const router = useRouter();
 
   // Check if palette is saved on component mount or when colors change
   useEffect(() => {
     const checkSaved = async () => {
       const result = await checkSavedPalette(colors);
-      setIsSavedPalette(result.isSaved);
+      setIsSavedPalette(result.isSaved); // Set isSavedPalette state based on the result (true/false) from the server action
     };
 
     checkSaved();
@@ -54,10 +58,12 @@ export default function Generator({ colors }: HeaderProps) {
 
   // Function to handle toggling palette save status
   const handleToggleSavePalette = async () => {
+    // Save or remove palette based on current save status
     const result = isSavedPalette
-      ? await removePalette(colors)
-      : await savePalette(colors);
+      ? await removePalette(colors) // Remove palette if already saved
+      : await savePalette(colors); // Save palette if not saved
 
+    // Set message based on the action result
     setMessage(result);
 
     // Update heart state based on the action result
@@ -71,6 +77,7 @@ export default function Generator({ colors }: HeaderProps) {
     setTimeout(() => setMessage(null), 3000);
   };
 
+  // Function to generate new colors
   const handleGenerate = () => {
     generateColors(lockedColors);
   };
@@ -78,7 +85,7 @@ export default function Generator({ colors }: HeaderProps) {
   return (
     <>
       <Sidebar isOpen={isSidebarOpen} />
-      <header className="fixed bottom-0 z-30 h-[6svh] w-full border-t border-foreground bg-background py-2">
+      <section className="fixed bottom-0 z-30 h-[6svh] w-full border-t border-foreground bg-background py-2">
         <div className="mx-auto flex w-11/12 items-center justify-between">
           <h1 className="text-2xl font-bold text-orange">
             <Link href="/" className="font-heading">
@@ -126,27 +133,27 @@ export default function Generator({ colors }: HeaderProps) {
             </button>
           </div>
         </div>
-        <AnimatePresence>
-          {message && (
-            <motion.div
-              key="message"
-              className="fixed bottom-16 z-50 flex w-full justify-center"
-              variants={messageVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
+      </section>
+      <AnimatePresence>
+        {message && (
+          <motion.div
+            key="message"
+            className="fixed bottom-16 z-50 flex w-full justify-center"
+            variants={messageVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            <p
+              className={`rounded-md px-4 py-4 text-white shadow-lg ${
+                message.error ? "bg-red-500" : "bg-green-500"
+              }`}
             >
-              <p
-                className={`rounded-md px-4 py-4 text-white shadow-lg ${
-                  message.error ? "bg-red-500" : "bg-green-500"
-                }`}
-              >
-                {message.error || message.message}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
+              {message.error || message.message}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

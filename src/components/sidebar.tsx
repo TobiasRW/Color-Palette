@@ -2,10 +2,12 @@
 import { motion } from "motion/react";
 import SidebarContent from "./sidebar-content";
 
+// Define props for Sidebar component
 type SidebarProps = {
   isOpen: boolean;
 };
 
+// Define variants for sidebar animation
 const sidebarVariants = {
   open: {
     x: 0,

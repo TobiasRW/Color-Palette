@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getUser } from "@/actions/users.actions";
 
 export default async function Home() {
+  // Get user
   const user = await getUser();
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-4 pt-6 text-center">

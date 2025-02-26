@@ -6,6 +6,7 @@ import mongoose, {
 } from "mongoose";
 import bcrypt from "bcryptjs";
 
+// Define the user schema
 const userSchema = new Schema(
   {
     email: {
@@ -33,6 +34,7 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   const user = this;
 
+  // Check if the password has been modified. If not, skip this middleware
   if (!user.isModified("password")) return next();
 
   const salt = await bcrypt.genSalt(10);
@@ -40,10 +42,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Add this after the existing 'save' middleware
+// Hash the password before updating the user.
 userSchema.pre("findOneAndUpdate", async function (next) {
   const update = this.getUpdate() as { password?: string };
 
+  // Check if the password field is being updated. If not, skip this middleware
   if (!update?.password) {
     return next();
   }

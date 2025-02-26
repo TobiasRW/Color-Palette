@@ -8,13 +8,18 @@ import UpdateProfile from "@/components/update-profile";
 import Link from "next/link";
 
 export default async function ProfilePage() {
+  // Get session cookie
   const session = (await cookies()).get("session")?.value || "";
+
+  // Decrypt session cookie
   const payload = await decrypt(session);
 
+  // Redirect to sign in page if user is not signed in
   if (!payload?.userId) {
     redirect("/signin");
   }
 
+  // Get user and palettes
   const user = await getUser();
   const palettes = await getUserPalettes();
 

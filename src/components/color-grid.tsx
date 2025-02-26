@@ -2,6 +2,7 @@
 import { removePalette } from "@/actions/colors.actions";
 import { X } from "@phosphor-icons/react";
 
+// Define props for ColorGrid component
 type ColorGridProps = {
   palettes: { colors: string[] }[];
 };

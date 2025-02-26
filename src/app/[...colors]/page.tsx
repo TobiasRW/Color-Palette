@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { LockSimple, LockSimpleOpen } from "@phosphor-icons/react";
 import { useLockStore } from "@/store/store"; // Import Zustand store
 
+// Function to determine text color based on background color
 const determineTextColor = (color: string) => {
   const r = parseInt(color.substring(0, 2), 16);
   const g = parseInt(color.substring(2, 4), 16);
@@ -16,9 +17,12 @@ const determineTextColor = (color: string) => {
 export default function ColorsPage() {
   const paramColors = useParams();
 
+  // Get colors from URL and split them
   const colors =
     (paramColors?.colors as string[] | undefined)?.[0]?.split("-") ?? [];
-  const { lockedColors, toggleLock } = useLockStore(); // Zustand state
+
+  // Get lockedColors and toggleLock function from zustand store
+  const { lockedColors, toggleLock } = useLockStore();
 
   return (
     <div className="grid h-[94svh] grid-cols-1 lg:grid-cols-5">

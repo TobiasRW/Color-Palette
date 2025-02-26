@@ -5,31 +5,37 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function SidebarContent() {
-  const [palettes, setPalettes] = useState<{ colors: string[] }[]>([]);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [palettes, setPalettes] = useState<{ colors: string[] }[]>([]); // State to store user palettes (array of objects containing color strings)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // State to check if user is authenticated
 
+  // Fetch user palettes and check if user is authenticated on component mount
   useEffect(() => {
     const checkAuthAndFetchPalettes = async () => {
-      const user = await getUser();
+      const user = await getUser(); // Get user
 
+      // If user is not signed in, set isAuthenticated to false and return
       if (!user) {
         setIsAuthenticated(false);
         return;
       }
 
+      // If user is signed in, set isAuthenticated to true and fetch user palettes
       setIsAuthenticated(true);
-      const result = await getUserPalettes();
+      const result = await getUserPalettes(); // Get user palettes
+      // If there is an error fetching palettes, return
       if (result?.error) {
         console.error("Error fetching palettes:", result.error);
         return;
       }
 
+      // Set palettes state with the result data
       setPalettes(result?.data || []);
     };
 
     checkAuthAndFetchPalettes();
   }, []);
 
+  // If user is null (loading), show loading message
   if (isAuthenticated === null) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -38,6 +44,7 @@ export default function SidebarContent() {
     );
   }
 
+  // If user is not authenticated, show sign in message
   if (!isAuthenticated) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
@@ -54,6 +61,7 @@ export default function SidebarContent() {
     );
   }
 
+  // If user is authenticated, show user palettes. If no palettes, show no palettes message
   return (
     <div className="hide-scrollbar mx-auto my-6 h-[80svh] w-10/12 overflow-y-scroll pt-6">
       {palettes.length > 0 ? (
