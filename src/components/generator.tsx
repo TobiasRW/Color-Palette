@@ -119,7 +119,7 @@ export default function Generator({ colors }: GeneratorProps) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [handleGenerate]);
 
   return (
     <>
@@ -133,7 +133,7 @@ export default function Generator({ colors }: GeneratorProps) {
           </h1>
           <div className="flex h-5 items-center space-x-4 lg:space-x-6">
             <div className="mr-10 hidden font-body text-sm font-extralight italic text-gray-500 lg:flex">
-              <p>Click 'Generate' or press the spacebar</p>
+              <p>Click Generate or press the spacebar</p>
             </div>
             <div className="flex gap-2 lg:gap-4">
               <button
