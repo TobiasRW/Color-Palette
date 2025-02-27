@@ -10,6 +10,7 @@ import {
 import { useLockStore } from "@/store/store";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Chat from "@/components/chat";
 
 // Function to determine text color based on background color
 const determineTextColor = (color: string) => {
@@ -67,6 +68,7 @@ export default function ColorsPage() {
 
   return (
     <div className="grid h-[94svh] grid-cols-1 lg:fixed lg:bottom-0 lg:h-[92svh] lg:w-full lg:grid-cols-5">
+      <Chat />
       <Generator colors={colors} lockedColors={lockedColors} />
       {colors.map((color, index) => (
         <div
