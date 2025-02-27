@@ -25,7 +25,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       initial="closed"
       animate={isOpen ? "open" : "closed"}
       variants={sidebarVariants}
-      className="fixed right-0 top-0 z-20 h-screen w-80 border-l border-foreground bg-background shadow-lg"
+      className="fixed right-0 top-0 z-20 h-screen w-80 border-l border-foreground bg-background shadow-lg lg:w-96"
     >
       <h2 className="border-b border-foreground py-4 text-center font-body text-xl font-semibold">
         Saved Palettes

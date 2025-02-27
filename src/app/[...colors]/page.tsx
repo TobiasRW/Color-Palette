@@ -66,21 +66,21 @@ export default function ColorsPage() {
   };
 
   return (
-    <div className="grid h-[94svh] grid-cols-1 lg:grid-cols-5">
+    <div className="grid h-[94svh] grid-cols-1 lg:fixed lg:bottom-0 lg:h-[92svh] lg:w-full lg:grid-cols-5">
       <Generator colors={colors} lockedColors={lockedColors} />
       {colors.map((color, index) => (
         <div
           key={color}
-          className="z-10 h-full font-semibold text-white"
+          className="z-10 h-full font-semibold text-white lg:text-lg xl:text-xl"
           style={{
             backgroundColor: `#${color}`,
             color: determineTextColor(color),
           }}
         >
-          <div className="mx-auto grid h-full w-10/12 grid-cols-3 items-center justify-center">
-            <div className=""></div>
+          <div className="mx-auto grid h-full w-10/12 grid-cols-3 items-center justify-center lg:my-auto lg:flex lg:h-[90%] lg:flex-col lg:justify-end lg:gap-10">
+            <div className="lg:hidden"></div>
             <p className="justify-self-center">{color.toUpperCase()}</p>
-            <div className="flex flex-col gap-2 justify-self-end">
+            <div className="flex flex-col gap-2 justify-self-end lg:flex-row lg:gap-4 xl:gap-8">
               <button onClick={() => toggleLock(index, color)} className="">
                 {lockedColors[index] ? (
                   <LockSimple

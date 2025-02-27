@@ -16,7 +16,7 @@ export default function Page() {
   const [state, signUpAction, pending] = useActionState(signUp, initialState);
 
   return (
-    <div className="pt-20">
+    <div className="mx-auto max-w-[500px] pt-20">
       <h1 className="text-center font-heading text-4xl font-bold text-orange">
         Palette
       </h1>

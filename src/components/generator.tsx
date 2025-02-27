@@ -85,28 +85,28 @@ export default function Generator({ colors }: GeneratorProps) {
   return (
     <>
       <Sidebar isOpen={isSidebarOpen} />
-      <section className="fixed bottom-0 z-30 h-[6svh] w-full border-t border-foreground bg-background py-2">
-        <div className="mx-auto flex w-11/12 items-center justify-between">
+      <section className="fixed bottom-0 z-30 h-[6svh] w-full border-t border-foreground bg-background py-2 lg:top-0 lg:flex lg:h-[8svh] lg:items-center lg:justify-center lg:border-b">
+        <div className="mx-auto flex w-11/12 items-center justify-between lg:mx-6 lg:w-full">
           <h1 className="text-2xl font-bold text-orange">
             <Link href="/" className="font-heading">
               Palette
             </Link>
           </h1>
-          <div className="flex h-5 items-center space-x-4">
-            <div className="flex gap-2">
+          <div className="flex h-5 items-center space-x-4 lg:space-x-6">
+            <div className="flex gap-2 lg:gap-4">
               <button
                 className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => router.back()}
                 aria-label="Go back"
               >
-                <ArrowBendUpLeft className="h-4 w-4 text-foreground" />
+                <ArrowBendUpLeft className="h-4 w-4 text-foreground lg:h-5 lg:w-5" />
               </button>
               <button
                 className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => router.forward()}
                 aria-label="Go forward"
               >
-                <ArrowBendUpRight className="h-4 w-4 text-foreground" />
+                <ArrowBendUpRight className="h-4 w-4 text-foreground lg:h-5 lg:w-5" />
               </button>
             </div>
             <Separator orientation="vertical" />

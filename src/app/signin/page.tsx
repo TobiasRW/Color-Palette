@@ -15,7 +15,7 @@ export default function Page() {
   // The hook returns the current state (message string), the signUp action function and a boolean indicating if the action is pending.
   const [state, signInAction, pending] = useActionState(signIn, initialState);
   return (
-    <div className="pt-20">
+    <div className="mx-auto max-w-[500px] pt-20">
       <h1 className="text-center font-heading text-4xl font-bold text-orange">
         Palette
       </h1>

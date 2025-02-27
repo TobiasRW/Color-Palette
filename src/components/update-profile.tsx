@@ -36,7 +36,7 @@ export default function UpdateProfile({ user }: UpdateProfileProps) {
   }, [state?.message]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 md:mx-auto md:w-8/12">
       {/* Form */}
       <Form action={updateProfileAction} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1">
