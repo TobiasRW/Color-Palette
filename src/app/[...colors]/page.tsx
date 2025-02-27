@@ -133,7 +133,7 @@ export default function ColorsPage() {
       <AnimatePresence>
         {message && (
           <motion.div
-            className="fixed bottom-16 left-0 right-0 z-50 mx-auto w-8/12 rounded-md bg-green-500 px-4 py-4 text-center text-white shadow-lg"
+            className="fixed bottom-16 left-0 right-0 z-50 mx-auto w-8/12 rounded-md bg-green-500 px-4 py-4 text-center text-white shadow-lg lg:w-80"
             variants={messageVariants}
             initial="hidden"
             animate="visible"
