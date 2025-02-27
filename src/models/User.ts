@@ -32,7 +32,11 @@ const userSchema = new Schema(
 
 // Hash the password before saving the user
 userSchema.pre("save", async function (next) {
-  const user = this;
+  // ✅ Explicitly type `this` as a Mongoose document
+  const user = this as mongoose.Document & {
+    password: string;
+    isModified: (path: string) => boolean;
+  };
 
   // Check if the password has been modified. If not, skip this middleware
   if (!user.isModified("password")) return next();
