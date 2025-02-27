@@ -8,7 +8,6 @@ import {
   ArrowBendUpRight,
 } from "@phosphor-icons/react";
 import {
-  generateColors,
   savePalette,
   checkSavedPalette,
   removePalette,
@@ -77,10 +76,50 @@ export default function Generator({ colors }: GeneratorProps) {
     setTimeout(() => setMessage(null), 3000);
   };
 
-  // Function to generate new colors
+  // function to generate a random color
+  function generateRandomColor() {
+    return `${Math.floor(Math.random() * 0xffffff)
+      .toString(16)
+      .padStart(6, "0")}`;
+  }
+
+  // function to generate a new palette
   const handleGenerate = () => {
-    generateColors(lockedColors);
+    const newColors = Array.from(
+      { length: 5 },
+      (_, index) => lockedColors[index] || generateRandomColor(), // Use locked color if exists
+    );
+
+    const colorString = newColors.join("-");
+    router.push(`/${colorString}`);
   };
+
+  // Handle spacebar press to generate a new palette
+  useEffect(() => {
+    // Function to handle keydown event
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const activeElement = document.activeElement as HTMLElement;
+
+      // Check if the active element is an input field
+      if (activeElement && activeElement.tagName === "INPUT") {
+        return; // Do nothing if the active element is an input field (to allow typing)
+      }
+
+      // Check if the spacebar is pressed
+      if (event.code === "Space") {
+        event.preventDefault();
+        handleGenerate();
+      }
+    };
+
+    // Add event listener for keydown
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Remove event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <>
@@ -93,6 +132,9 @@ export default function Generator({ colors }: GeneratorProps) {
             </Link>
           </h1>
           <div className="flex h-5 items-center space-x-4 lg:space-x-6">
+            <div className="mr-10 hidden font-body text-sm font-extralight italic text-gray-500 lg:flex">
+              <p>Click 'Generate' or press the spacebar</p>
+            </div>
             <div className="flex gap-2 lg:gap-4">
               <button
                 className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"

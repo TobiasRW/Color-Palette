@@ -6,7 +6,7 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
-// Generates a palette and redirects to the new URL
+// Generates a palette and redirects to the new URL (been moved to the client side)
 export async function generateColors(
   lockedColors: { [index: number]: string } = {},
 ) {
