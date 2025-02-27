@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 if (!process.env.MONGO_URI) {
   throw new Error("Please define the MONGO_URI environment variable.");
@@ -6,14 +6,24 @@ if (!process.env.MONGO_URI) {
 
 const MONGODB_URI: string = process.env.MONGO_URI;
 
-// ✅ Use globalThis to avoid var in declare global
-(globalThis as any).mongoose = (globalThis as any).mongoose || {
+// ✅ Define a proper type instead of using 'any'
+interface MongooseCache {
+  conn: mongoose.Connection | null;
+  promise: Promise<mongoose.Connection> | null;
+}
+
+// ✅ Ensure globalThis has a properly typed cache
+declare global {
+  var mongooseCache: MongooseCache | undefined;
+}
+
+// ✅ Use a cached connection if available
+const cached: MongooseCache = globalThis.mongooseCache ?? {
   conn: null,
   promise: null,
 };
 
-// ✅ Use const instead of let since cached is never reassigned
-const cached = (globalThis as any).mongoose;
+globalThis.mongooseCache = cached;
 
 async function dbConnect() {
   if (cached.conn) {
@@ -29,12 +39,12 @@ async function dbConnect() {
       })
       .then((mongoose) => {
         console.log("✅ MongoDB connected successfully.");
-        return mongoose;
+        return mongoose.connection;
       });
   }
 
   cached.conn = await cached.promise;
-  (globalThis as any).mongoose = cached; // ✅ Store the connection globally
+  globalThis.mongooseCache = cached;
   return cached.conn;
 }
 
