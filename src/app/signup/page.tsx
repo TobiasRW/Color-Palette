@@ -35,7 +35,7 @@ export default function Page() {
           <input
             type="email"
             name="email"
-            className="rounded-md border border-foreground bg-white p-2 shadow-md"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md focus:outline-none"
             placeholder="Email..."
           />
         </label>
@@ -44,7 +44,7 @@ export default function Page() {
           <input
             type="text"
             name="name"
-            className="rounded-md border border-foreground bg-white p-2 shadow-md"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md focus:outline-none"
             placeholder="First Name..."
           />
         </label>
@@ -53,7 +53,7 @@ export default function Page() {
           <input
             type="password"
             name="password"
-            className="rounded-md border border-foreground bg-white p-2 shadow-md"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md focus:outline-none"
             placeholder="Password..."
           />
         </label>
@@ -62,7 +62,7 @@ export default function Page() {
           <input
             type="password"
             name="confirmPassword"
-            className="rounded-md border border-foreground bg-white p-2 shadow-md"
+            className="rounded-md border border-foreground bg-white p-2 shadow-md focus:outline-none"
             placeholder="Confirm password..."
           />
         </label>
