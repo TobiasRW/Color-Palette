@@ -12,18 +12,23 @@ type UpdateProfileProps = {
     name: string;
   };
 };
-// Define the initial state for the component - this is the shape used by the useActionState hook
-const initialState = {
-  message: "",
+
+// Define the state type for handling success/error messages
+type UpdateUserState = {
+  message?: string;
+  error?: string;
 };
+
+// Initial state when the component loads (no message or error yet)
+const initialState: UpdateUserState = { message: "" };
 
 export default function UpdateProfile({ user }: UpdateProfileProps) {
   // Use the useActionState hook to manage the state and execute the signUp action.
   // The hook returns the current state (message string), the updateProfile action function and a boolean indicating if the action is pending.
-  const [state, updateProfileAction, pending] = useActionState(
-    updateUser,
-    initialState,
-  );
+  const [state, updateProfileAction, pending] = useActionState<
+    UpdateUserState,
+    FormData
+  >(updateUser, initialState);
 
   // State to manage update mode
   const [isUpdating, setIsUpdating] = useState(false);

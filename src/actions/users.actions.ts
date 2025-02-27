@@ -27,6 +27,13 @@ const updateUserSchema = z.object({
     .optional(),
 });
 
+//___________________TYPES_____________________
+
+type UpdateUserState = {
+  message?: string;
+  error?: string;
+};
+
 //___________________ACTIONS_____________________
 
 // function to get the user profile
@@ -42,9 +49,12 @@ export async function getUser() {
 }
 
 // function to update the user profile
-export async function updateUser(prevState: any, formData: FormData) {
+export async function updateUser(
+  prevState: UpdateUserState, // no more any!
+  formData: FormData,
+): Promise<UpdateUserState> {
   const session = await getSession();
-  if (!session?.userId) return null;
+  if (!session?.userId) return { error: "You must be signed in" };
 
   // Get form values from FormData. Set to undefined if empty
   const formValues = {

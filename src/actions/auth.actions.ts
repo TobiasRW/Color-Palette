@@ -38,10 +38,16 @@ const SignInSchema = z.object({
   password: z.string().nonempty("Password is required"),
 });
 
+//___________________TYPES_____________________
+
+type InitialState = {
+  message?: string;
+};
+
 //___________________ACTIONS_____________________
 
 // Define the signUp action - prevState comes from the useActionState hook
-export async function signUp(prevState: any, formData: FormData) {
+export async function signUp(prevState: InitialState, formData: FormData) {
   // Validate form data against the SignUpSchema
   const data = SignUpSchema.safeParse({
     email: formData.get("email")?.toString(),
@@ -97,7 +103,7 @@ export async function signUp(prevState: any, formData: FormData) {
 //___________________________________________________________________
 
 // Define the signIn action - prevState comes from the useActionState hook
-export async function signIn(prevState: any, formData: FormData) {
+export async function signIn(prevState: InitialState, formData: FormData) {
   // Validate form data against the SignInSchema
   const data = SignInSchema.safeParse({
     email: formData.get("email")?.toString(),

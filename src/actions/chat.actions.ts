@@ -14,6 +14,10 @@ type Message = {
   content: string;
 };
 
+type InitialState = {
+  message?: string;
+};
+
 // Define the function to generate a response
 export async function generateResponse(message: string) {
   // Check if the message is empty
@@ -67,7 +71,10 @@ export async function generateResponse(message: string) {
 }
 
 // Function to handle user form submission (input from the user)
-export async function generatePalette(_prevState: any, formData: FormData) {
+export async function generatePalette(
+  _prevState: InitialState,
+  formData: FormData,
+) {
   const message = formData.get("message") as string;
   const modelResponse = await generateResponse(message);
   return modelResponse;
