@@ -6,19 +6,14 @@ if (!process.env.MONGO_URI) {
 
 const MONGODB_URI: string = process.env.MONGO_URI;
 
-// ✅ Use interface instead of var
-interface MongooseGlobal {
-  conn: Mongoose | null;
-  promise: Promise<Mongoose> | null;
-}
+// ✅ Use globalThis to avoid var in declare global
+(globalThis as any).mongoose = (globalThis as any).mongoose || {
+  conn: null,
+  promise: null,
+};
 
-// ✅ Use globalThis instead of var in global scope
-declare global {
-  var mongoose: MongooseGlobal | undefined;
-}
-
-// ✅ Use a cached connection in development to prevent multiple connections
-let cached = globalThis.mongoose ?? { conn: null, promise: null };
+// ✅ Use const instead of let since cached is never reassigned
+const cached = (globalThis as any).mongoose;
 
 async function dbConnect() {
   if (cached.conn) {
@@ -39,7 +34,7 @@ async function dbConnect() {
   }
 
   cached.conn = await cached.promise;
-  globalThis.mongoose = cached; // ✅ Store the connection globally
+  (globalThis as any).mongoose = cached; // ✅ Store the connection globally
   return cached.conn;
 }
 
