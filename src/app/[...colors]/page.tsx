@@ -1,8 +1,13 @@
 "use client";
 import Generator from "@/components/generator";
-import { useParams } from "next/navigation";
-import { LockSimple, LockSimpleOpen, Copy } from "@phosphor-icons/react";
-import { useLockStore } from "@/store/store"; // Import Zustand store
+import { useParams, useRouter } from "next/navigation";
+import {
+  LockSimple,
+  LockSimpleOpen,
+  Copy,
+  Repeat,
+} from "@phosphor-icons/react";
+import { useLockStore } from "@/store/store";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -25,6 +30,7 @@ const messageVariants = {
 export default function ColorsPage() {
   const [message, setMessage] = useState("");
   const paramColors = useParams();
+  const router = useRouter();
 
   // Get colors from URL and split them
   const colors =
@@ -38,6 +44,25 @@ export default function ColorsPage() {
     navigator.clipboard.writeText(`#${color}`);
     setMessage("copied to clipboard!");
     setTimeout(() => setMessage(""), 2000);
+  };
+
+  // Function to generate a random color
+  const generateColor = (): string => {
+    return Math.floor(Math.random() * 0xffffff)
+      .toString(16)
+      .padStart(6, "0");
+  };
+
+  // Function to update a single color
+  const updateSingleColor = (index: number) => {
+    if (lockedColors[index]) return; // Don't update if the color is locked
+
+    const newColor = generateColor();
+    const newColors = [...colors];
+    newColors[index] = newColor;
+
+    // Navigate to the new URL with updated colors
+    router.push(`/${newColors.join("-")}`);
   };
 
   return (
@@ -80,6 +105,18 @@ export default function ColorsPage() {
                 className="justify-self-end"
               >
                 <Copy
+                  weight="fill"
+                  className="h-5 w-5"
+                  style={{
+                    color: determineTextColor(color),
+                  }}
+                />
+              </button>
+              <button
+                onClick={() => updateSingleColor(index)}
+                className="justify-self-end"
+              >
+                <Repeat
                   weight="fill"
                   className="h-5 w-5"
                   style={{
