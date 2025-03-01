@@ -63,27 +63,44 @@ export default function SidebarContent() {
 
   // If user is authenticated, show user palettes. If no palettes, show no palettes message
   return (
-    <div className="hide-scrollbar mx-auto my-6 h-[80svh] w-10/12 overflow-y-scroll pt-6">
-      {palettes.length > 0 ? (
-        palettes.map((palette, index) => (
-          <div
-            key={index}
-            className="mb-4 flex h-12 flex-1 overflow-hidden rounded-md shadow-md"
-          >
-            <Link href={`/${palette.colors.join("-")}`} className="flex w-full">
-              {palette.colors.map((color, colorIndex) => (
-                <div
-                  key={colorIndex}
-                  className="h-full w-full"
-                  style={{ backgroundColor: `#${color}` }}
-                />
-              ))}
-            </Link>
-          </div>
-        ))
-      ) : (
-        <p className="text-center text-gray-600">No saved palettes yet</p>
-      )}
-    </div>
+    <>
+      <div className="flex flex-col items-center justify-center gap-4 p-6 pt-6 text-center">
+        <p className="text-gray-600">
+          You can manage your palettes in your profile
+        </p>
+        <Link
+          href="/profile"
+          className="rounded-md border border-foreground bg-background px-4 py-2 text-sm text-foreground shadow-md"
+        >
+          Profile
+        </Link>
+        <hr className="w-full" />
+      </div>
+      <div className="hide-scrollbar mx-auto my-6 h-[80svh] w-10/12 overflow-y-scroll">
+        {palettes.length > 0 ? (
+          palettes.map((palette, index) => (
+            <div
+              key={index}
+              className="mb-4 flex h-12 flex-1 overflow-hidden rounded-md shadow-md"
+            >
+              <Link
+                href={`/${palette.colors.join("-")}`}
+                className="flex w-full"
+              >
+                {palette.colors.map((color, colorIndex) => (
+                  <div
+                    key={colorIndex}
+                    className="h-full w-full"
+                    style={{ backgroundColor: `#${color}` }}
+                  />
+                ))}
+              </Link>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-600">No saved palettes yet</p>
+        )}
+      </div>
+    </>
   );
 }

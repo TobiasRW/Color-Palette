@@ -100,7 +100,7 @@ export async function removePalette(colors: string[], path?: string) {
   }
 }
 
-// function to check if a palette is saved for the current user (for the heart icon)
+// function to check if a palette is saved for the current user (for the heart icon)... (no longer in use)
 export async function checkSavedPalette(
   colors: string[],
 ): Promise<{ isSaved: boolean }> {
