@@ -7,7 +7,11 @@ import {
   ArrowBendUpLeft,
   ArrowBendUpRight,
 } from "@phosphor-icons/react";
-import { savePalette } from "@/actions/colors.actions";
+import {
+  savePalette,
+  checkSavedPalette,
+  removePalette,
+} from "@/actions/colors.actions";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
@@ -35,17 +39,41 @@ const messageVariants = {
 export default function Generator({ colors }: GeneratorProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Controls sidebar visibility
   const [message, setMessage] = useState<MessageType | null>(null); // State for success and error messages
+  const [isSavedPalette, setIsSavedPalette] = useState<boolean>(false); // State to check if palette is saved
   const { lockedColors } = useLockStore(); // Zustand persisted state
 
   // Get router
   const router = useRouter();
 
-  // Function to save a palette
-  const handleSavePalette = async () => {
-    // Save result from the savePalette action
-    const result = await savePalette(colors);
-    setMessage(result); // Set message based on the result
-    setTimeout(() => setMessage(null), 3000); // Clear message after 3 seconds
+  // Check if palette is saved on component mount or when colors change
+  useEffect(() => {
+    const checkSaved = async () => {
+      const result = await checkSavedPalette(colors);
+      setIsSavedPalette(result.isSaved); // Set isSavedPalette state based on the result (true/false) from the server action
+    };
+
+    checkSaved();
+  }, [colors]);
+
+  // Function to handle toggling palette save status
+  const handleToggleSavePalette = async () => {
+    // Save or remove palette based on current save status
+    const result = isSavedPalette
+      ? await removePalette(colors) // Remove palette if already saved
+      : await savePalette(colors); // Save palette if not saved
+
+    // Set message based on the action result
+    setMessage(result);
+
+    // Update heart state based on the action result
+    if (result.message === "Palette saved successfully!") {
+      setIsSavedPalette(true);
+    } else if (result.message === "Palette removed successfully!") {
+      setIsSavedPalette(false);
+    }
+
+    // Clear message after 3 seconds
+    setTimeout(() => setMessage(null), 3000);
   };
 
   // function to generate a random color
@@ -103,47 +131,47 @@ export default function Generator({ colors }: GeneratorProps) {
               Palette
             </Link>
           </h1>
-          <div className="flex h-5 items-center space-x-2 sm:space-x-4">
+          <div className="flex h-5 items-center space-x-4 lg:space-x-6">
             <div className="mr-10 hidden font-body text-sm font-extralight italic text-gray-500 lg:flex">
               <p>Click Generate or press the spacebar</p>
             </div>
-            <div className="gap-2 lg:gap-4">
+            <div className="flex gap-2 lg:gap-4">
               <button
-                className="rounded-md p-1 transition-colors hover:bg-gray-100"
+                className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => router.back()}
                 aria-label="Go back"
               >
-                <ArrowBendUpLeft className="h-3 w-3 text-foreground sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
+                <ArrowBendUpLeft className="h-4 w-4 text-foreground lg:h-5 lg:w-5" />
               </button>
               <button
-                className="rounded-md p-1 transition-colors hover:bg-gray-100"
+                className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => router.forward()}
                 aria-label="Go forward"
               >
-                <ArrowBendUpRight className="h-3 w-3 text-foreground sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
+                <ArrowBendUpRight className="h-4 w-4 text-foreground lg:h-5 lg:w-5" />
               </button>
             </div>
             <Separator orientation="vertical" />
             <button
               onClick={handleGenerate}
-              className="rounded-md bg-orange p-1 font-body text-xs text-white shadow-md sm:p-2"
+              className="rounded-md bg-orange p-2 font-body text-xs text-white shadow-md"
             >
               Generate
             </button>
             <Separator orientation="vertical" />
-            <button
-              className="flex items-center justify-center gap-1 rounded-md p-1 transition-colors hover:bg-gray-100"
-              onClick={handleSavePalette}
-            >
-              <p className="hidden font-body md:flex">save</p>
-              <Heart className="h-4 w-4 text-foreground sm:h-4 sm:w-5" />
-            </button>
+            <Heart
+              weight={isSavedPalette ? "fill" : "regular"}
+              className={`h-5 w-5 cursor-pointer ${
+                isSavedPalette ? "text-red-500" : "text-foreground"
+              }`}
+              onClick={handleToggleSavePalette}
+            />
             <Separator orientation="vertical" />
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="rounded-md p-1 transition-colors hover:bg-gray-100"
+              className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              <List className="h-4 w-4 text-foreground sm:h-5 sm:w-5" />
+              <List className="h-5 w-5 text-foreground" />
             </button>
           </div>
         </div>
